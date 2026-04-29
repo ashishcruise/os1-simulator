@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NUMA Simulator</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">N</div>
+  <div>
+    <h1>NUMA Simulator <span>v1.0</span></h1>
+  </div>
+  <div class="status-dot" id="status-dot"></div>
+  <div class="status-label" id="status-label">Idle</div>
+</header>
+
+<main>
+  <div class="grid-top">
+    <div class="card">
+      <div class="card-title">Configuration</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Nodes</label>
+          <input type="number" id="cfg-nodes" value="4" min="2" max="8">
+        </div>
+        <div class="field">
+          <label>Memory / Node</label>
+          <input type="number" id="cfg-mem" value="16" min="4" max="64">
+        </div>
+        <div class="field">
+          <label>Processes</label>
+          <input type="number" id="cfg-procs" value="5" min="1" max="20">
+        </div>
+        <div class="field">
+          <label>Requests</label>
+          <input type="number" id="cfg-reqs" value="30" min="1" max="500">
+        </div>
+      </div>
+      <div class="controls-row">
+        <button class="btn-run" id="btn-run" onclick="startSim()">▶ Run</button>
+        <button class="btn-step" id="btn-step" onclick="stepSim()" disabled>Step</button>
+        <button class="btn-reset" onclick="resetSim()">Reset</button>
+        <span class="speed-label">Speed</span>
+        <select class="speed-select" id="speed-select">
+          <option value="800">Slow</option>
+          <option value="300" selected>Normal</option>
+          <option value="80">Fast</option>
+          <option value="0">Instant</option>
+        </select>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress"></div>
+      </div>
+    </div>
+
+    <div class="stats-strip">
+      <div class="stat-card">
+        <div class="stat-label">Total Accesses</div>
+        <div class="stat-value" id="s-total">0</div>
+        <div class="stat-sub">requests processed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Local Accesses</div>
+        <div class="stat-value green" id="s-local">0</div>
+        <div class="stat-sub" id="s-local-pct">— latency ×1</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Remote Accesses</div>
+        <div class="stat-value red" id="s-remote">0</div>
+        <div class="stat-sub" id="s-remote-pct">— latency ×5</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg Latency</div>
+        <div class="stat-value amber" id="s-latency">—</div>
+        <div class="stat-sub">cycles per request</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="viz-section card">
+    <div class="card-title">Node Visualization</div>
+    <div class="nodes-grid" id="nodes-grid"></div>
+  </div>
+
+  <div class="bottom-grid">
+    <div class="log-panel">
+      <div class="log-header">
+        <div class="card-title">Access Log</div>
+        <button class="btn-reset" onclick="clearLog()">Clear</button>
+      </div>
+      <div class="log-scroll" id="log-scroll"></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="card-title">Distribution</div>
+      <canvas id="chart-main"></canvas>
+    </div>
+  </div>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
